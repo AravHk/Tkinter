@@ -1,5 +1,6 @@
 import tkinter
 from tkinter import messagebox
+import json
 #pack,place and grid
 #label.pack()
 #label.grid(row = 0,column = 0)
@@ -9,12 +10,20 @@ window.geometry('340x440')
 window.configure(bg = '#333333')
 
 def login():
-    username = "JohnDoe"
-    password = "JohnDoe123$"
-    if username_entry.get() == username and password_entry.get() == password:
-        messagebox.showinfo(title = "Login Success",message = "Successfully logged in")
+    try:
+        with open('users.json', 'r') as f:
+            users = json.load(f)
+    except FileNotFoundError:
+        messagebox.showerror("Error", "User data file not found.")
+        return
+
+    entered_username = username_entry.get()
+    entered_password = password_entry.get()
+
+    if entered_username in users and users[entered_username] == entered_password:
+        messagebox.showinfo("Login Success", "Successfully logged in")
     else:
-        messagebox.showerror(title = "Login Failed",message = "Invalid Username or Password")
+        messagebox.showerror("Login Failed", "Invalid Username or Password")
 frame = tkinter.Frame(bg = '#333333')
 
 #creating widgets
